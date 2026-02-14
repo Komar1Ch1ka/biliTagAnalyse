@@ -21,12 +21,25 @@ func main() {
 	}
 
 	fmt.Println("=== B站推荐视频 Tag 分析爬虫 ===")
-	log.Printf("配置文件: %s", opts.ConfigPath)
+	log.Printf("配置文件: %s", config.ResolveConfigPath(opts.ConfigPath))
 	log.Printf("运行模式: %s", opts.ModeDescription())
 
 	cfg, err := config.LoadConfig(opts.ConfigPath)
 	if err != nil {
 		log.Fatalf("加载配置失败: %v", err)
+	}
+
+	if opts.OllamaURL == "" || opts.OllamaURL == cmd.DefaultOllamaURL {
+		opts.OllamaURL = cfg.OllamaURL
+	}
+	if opts.OllamaModel == "" || opts.OllamaModel == cmd.DefaultOllamaModel {
+		opts.OllamaModel = cfg.OllamaModel
+	}
+	if opts.APIEndpoint == "" {
+		opts.APIEndpoint = cfg.APIEndpoint
+	}
+	if opts.APIKey == "" {
+		opts.APIKey = cfg.APIKey
 	}
 
 	log.Printf("配置信息:")
@@ -163,7 +176,7 @@ func printAnalysisSummary(result *analyzer.AnalysisResult, mode cmd.RunMode) {
 	fmt.Println("\n=== 分析摘要 ===")
 	fmt.Printf("总视频数: %d\n", result.RawStats.TotalVideos)
 	fmt.Printf("总Tag数: %d\n", result.RawStats.TotalTags)
-	
+
 	fmt.Println("\nTop 5 Tags:")
 	for i := 0; i < len(result.TopTags) && i < 5; i++ {
 		fmt.Printf("  %d. %s (次数: %d)\n", i+1, result.TopTags[i].Tag, result.TopTags[i].Count)

@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
+
+	"biliTagAnalyse/cmd"
 )
 
 type Config struct {
@@ -22,8 +25,32 @@ type Config struct {
 	APIKey          string `json:"api_key"`
 }
 
+func ResolveConfigPath(path string) string {
+	if filepath.IsAbs(path) {
+		return path
+	}
+
+	if _, err := os.Stat(path); err == nil {
+		absPath, _ := filepath.Abs(path)
+		return absPath
+	}
+
+	execPath, err := os.Executable()
+	if err == nil {
+		execDir := filepath.Dir(execPath)
+		execConfigPath := filepath.Join(execDir, path)
+		if _, err := os.Stat(execConfigPath); err == nil {
+			return execConfigPath
+		}
+	}
+
+	absPath, _ := filepath.Abs(path)
+	return absPath
+}
+
 func LoadConfig(path string) (*Config, error) {
-	data, err := os.ReadFile(path)
+	resolvedPath := ResolveConfigPath(path)
+	data, err := os.ReadFile(resolvedPath)
 	if err != nil {
 		return nil, fmt.Errorf("读取配置文件失败: %w", err)
 	}
@@ -62,10 +89,10 @@ func LoadConfig(path string) (*Config, error) {
 		cfg.RunMode = "once"
 	}
 	if cfg.OllamaURL == "" {
-		cfg.OllamaURL = "http://localhost:11434"
+		cfg.OllamaURL = cmd.DefaultOllamaURL
 	}
 	if cfg.OllamaModel == "" {
-		cfg.OllamaModel = "qwen2.5:7b"
+		cfg.OllamaModel = cmd.DefaultOllamaModel
 	}
 
 	return &cfg, nil
