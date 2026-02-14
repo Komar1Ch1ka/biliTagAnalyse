@@ -1,11 +1,15 @@
 {
-  "cookie": "Your bilibili cookie",
+  "cookie": "Your bilibili Cookie",
   "crawl_count": 5,
-  "crawl_interval": 1,
-  "request_interval": 100,
-  "max_concurrent": 5,
+  "crawl_interval": 300,
+  "request_interval": 500,
+  "max_concurrent": 3,
   "retry_count": 3,
   "retry_delay": 2,
   "output_file": "results/tags_stats.json",
-  "run_mode": "once"
+  "run_mode": "once",
+  "ollama_url": "http://localhost:11434",
+  "ollama_model": "qwen2.5:7b",
+  "api_endpoint": "",
+  "api_key": ""
 }
