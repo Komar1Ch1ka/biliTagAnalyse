@@ -16,6 +16,10 @@ type Config struct {
 	RetryDelay      int    `json:"retry_delay"`
 	OutputFile      string `json:"output_file"`
 	RunMode         string `json:"run_mode"`
+	OllamaURL       string `json:"ollama_url"`
+	OllamaModel     string `json:"ollama_model"`
+	APIEndpoint     string `json:"api_endpoint"`
+	APIKey          string `json:"api_key"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -56,6 +60,12 @@ func LoadConfig(path string) (*Config, error) {
 	}
 	if cfg.RunMode == "" {
 		cfg.RunMode = "once"
+	}
+	if cfg.OllamaURL == "" {
+		cfg.OllamaURL = "http://localhost:11434"
+	}
+	if cfg.OllamaModel == "" {
+		cfg.OllamaModel = "qwen2.5:7b"
 	}
 
 	return &cfg, nil
