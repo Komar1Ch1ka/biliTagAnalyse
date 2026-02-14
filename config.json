@@ -1,0 +1,11 @@
+{
+  "cookie": "Your bilibili cookie",
+  "crawl_count": 5,
+  "crawl_interval": 1,
+  "request_interval": 100,
+  "max_concurrent": 5,
+  "retry_count": 3,
+  "retry_delay": 2,
+  "output_file": "results/tags_stats.json",
+  "run_mode": "once"
+}
