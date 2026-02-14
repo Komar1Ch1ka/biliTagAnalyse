@@ -111,6 +111,32 @@ go build -o biliTagAnalyse.exe .
 | `-api-endpoint` | 远程API端点地址 | - |
 | `-api-key` | 远程API密钥 | - |
 
+## 环境变量
+
+程序支持通过环境变量配置参数，命令行参数优先级高于环境变量：
+
+| 环境变量 | 说明 | 默认值 |
+|----------|------|--------|
+| `BILI_CONFIG_PATH` | 配置文件路径 | config.json |
+| `BILI_OLLAMA_URL` | Ollama服务地址 | http://localhost:11434 |
+| `BILI_OLLAMA_MODEL` | Ollama模型名称 | qwen2.5:7b |
+| `BILI_API_ENDPOINT` | 远程API端点地址 | - |
+| `BILI_API_KEY` | 远程API密钥 | - |
+
+使用示例：
+
+```bash
+# Linux/macOS
+export BILI_OLLAMA_URL="http://192.168.1.100:11434"
+export BILI_OLLAMA_MODEL="llama3:8b"
+./biliTagAnalyse -ollama
+
+# Windows PowerShell
+$env:BILI_OLLAMA_URL="http://192.168.1.100:11434"
+$env:BILI_OLLAMA_MODEL="llama3:8b"
+.\biliTagAnalyse.exe -ollama
+```
+
 ## 配置文件
 
 config.json 配置文件说明：
@@ -165,7 +191,8 @@ config.json 配置文件说明：
 ```
 biliTagAnalyse/
 ├── cmd/
-│   └── cmd.go           # 命令行参数解析
+│   ├── cmd.go           # 命令行参数解析
+│   └── defaults.go      # 默认值和常量定义
 ├── config/
 │   └── config.go        # 配置文件加载
 ├── crawler/
